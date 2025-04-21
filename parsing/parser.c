@@ -1,5 +1,4 @@
-#include "../../includes/parser.h"
-#include "../../includes/minishell.h"
+#include "../parser.h"
 #include <stdio.h>
 #include "libft/libft.h"
 

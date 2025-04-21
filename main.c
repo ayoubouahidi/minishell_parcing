@@ -1,5 +1,4 @@
-#include "../includes/parser.h"
-#include "../includes/minishell.h"
+#include "parser.h"
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdlib.h>
