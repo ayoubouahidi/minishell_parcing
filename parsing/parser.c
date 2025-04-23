@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "libft/libft.h"
 
+
 // static char **split_pipe(char *line) {
 //     char **parts = malloc(100 * sizeof(char *));
 //     int i = 0;
@@ -195,6 +196,7 @@ void	parcer(int ac, char **av)
 		printf("trim => %s\n", trim);
 		add_node(trim, &head);
 		printlist(head);
+		
 		// cmd->args = ft_split(trim, ' ');
 		// if(!cmd->args)
 		// {
