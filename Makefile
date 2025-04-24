@@ -5,14 +5,14 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -I/home/elkharti/projects/minishell/includes
 LDFLAGS = -lreadline
 
-SRCS = srcs/main.c srcs/parsing/parser.c srcs/execution/builtin.c \
-	srcs/execution/utils/utils00.c srcs/execution/executor.c srcs/parsing/split.c  srcs/parsing/trim.c 
+SRCS = main.c parsing/parser.c  \
+		 parsing/trim.c 
 
 
 OBJ = $(SRCS:.c=.o)
 
 
-LIBFT_DIR = srcs/parsing/libft
+LIBFT_DIR = parsing/libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 

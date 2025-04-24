@@ -1,0 +1,10 @@
+Makefile
+a b c
+main.c
+main.o
+minishell
+parser.h
+parsing
+test
+testfile.txt
+zmap.tldr

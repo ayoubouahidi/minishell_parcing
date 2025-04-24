@@ -1,5 +1,6 @@
 #include "../parser.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include "libft/libft.h"
 
 
@@ -133,47 +134,77 @@ void	ft_lstadd_back_cmd(t_command **lst, t_command *new)
 		*lst = new;
 }
 
-void	add_node(char *line, t_command **head)
+// void	add_node(char *line, t_command **head)
+// {
+// 	int i;
+// 	t_command *cmd;
+// 	int lenght_line;
+// 	// char *line_pss; 
+// 	cmd = NULL;
+// 	head++;
+// 	cmd++;
+
+// 	i = 0;
+// 	lenght_line = 0;
+// 	// a refaire 
+// 	while (line[i] != '\0')
+// 	{
+		
+// 		// lenght_line++;// lenght_line++;
+// 		// if (line[i] == ' ')
+// 		// {
+// 			// cmd = ft_lstnew_cmd(line_pss - lenght_line -1);
+// 			// ft_lstadd_back_cmd(head, cmd);
+
+// 			// printf("String => %s\n", line + i - lenght_line -1);
+// 			// i++;
+// 		// }
+// 		// while (line[i] == ' ')
+// 		// 	i++;
+// 		// if (line[i] == '"')
+// 		// {
+// 		// 	while (line[i] != '"')
+// 		// 		i++;
+// 		// 	if (line[i] == '"')
+// 		// 	{
+// 		// 		cmd = ft_lstnew_cmd(line + (i - 1));
+// 		// 		ft_lstadd_back_cmd(head, cmd);
+// 		// 	}
+// 		// 	else
+// 		// 		write(1, "Error\n", 6);
+// 		// }
+// 		i++;
+// 	}
+// }
+
+bool syntaxe_error(char *str)
 {
 	int i;
-	t_command *cmd;
-	int lenght_line;
-	// char *line_pss; 
-	cmd = NULL;
-	head++;
-	cmd++;
+	int quotes_d;
+	int quotes_s;
+
+	quotes_d = 0;
+	quotes_s = 0;
 
 	i = 0;
-	lenght_line = 0;
-	// a refaire 
-	while (line[i] != '\0')
+	while(str[i] != '\0')
 	{
-		
-		// lenght_line++;// lenght_line++;
-		// if (line[i] == ' ')
-		// {
-			// cmd = ft_lstnew_cmd(line_pss - lenght_line -1);
-			// ft_lstadd_back_cmd(head, cmd);
-
-			// printf("String => %s\n", line + i - lenght_line -1);
-			// i++;
-		// }
-		// while (line[i] == ' ')
-		// 	i++;
-		// if (line[i] == '"')
-		// {
-		// 	while (line[i] != '"')
-		// 		i++;
-		// 	if (line[i] == '"')
-		// 	{
-		// 		cmd = ft_lstnew_cmd(line + (i - 1));
-		// 		ft_lstadd_back_cmd(head, cmd);
-		// 	}
-		// 	else
-		// 		write(1, "Error\n", 6);
-		// }
+		if (str[i] == '"' && !quotes_s )
+		{
+			quotes_d = !quotes_d;
+		}
+		else if (str[i] == '\'' && !quotes_d)
+		{
+			quotes_s = !quotes_s;
+		}
 		i++;
 	}
+	// printf("test");
+	// if (in_q_d == 0 && in_q_s == 0)
+    //     return true; 
+	if(((quotes_d  == 0 ) && (quotes_s  == 0)))
+		return (true);
+	return (false);
 }
 
 void	parcer(int ac, char **av)
@@ -184,6 +215,7 @@ void	parcer(int ac, char **av)
 	t_command *head;
 
 	head = NULL;
+	head++;
     // (head)->args = NULL;
 	ac++;
 	av++;
@@ -193,9 +225,16 @@ void	parcer(int ac, char **av)
 		if(*line)
 			add_history(line);
 		trim = ft_strtrim(line, " ");
-		printf("trim => %s\n", trim);
-		add_node(trim, &head);
-		printlist(head);
+		if (syntaxe_error(trim))
+		{
+			printf("trim => %s\n", trim);
+		}
+		else 
+		{
+			write(1, "Quotes Error !\n", 15);
+		}
+		// add_node(trim, &head);
+		// printlist(head);
 		
 		// cmd->args = ft_split(trim, ' ');
 		// if(!cmd->args)

@@ -1,0 +1,8 @@
+---syntaxe analytic
+
+what is the cases i have ?
+    
+    +Unclosed single and double quotes
+    +Nested quostes; exemple = "'ayoub'"
+    +empty quotes; exemple = "" or '';
+    

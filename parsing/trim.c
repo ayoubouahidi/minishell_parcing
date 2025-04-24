@@ -10,10 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../../includes/parser.h"
-#include "../../includes/utils.h"
+
+#include "../parser.h"
+// #include "../../includes/utils.h"
 #include "libft/libft.h"
+#include <stdlib.h>
 
 static char	*mallocatehaha(char *newstr)
 {
