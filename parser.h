@@ -7,6 +7,8 @@
 #include <readline/history.h>
 #include <unistd.h>
 
+#define WHITESPACE " \t\n\r\f\v"
+
 typedef struct s_command
 {
     // char *cmd;
@@ -20,6 +22,25 @@ typedef enum
    UNCLOSED_DOUBLE_Q,
    UNCLODES_SINFGLE_Q 
 } e_syntaxe;
+
+// tokenation
+
+typedef struct s_token
+{
+	TYPE_TOKEN type;
+	char *value;
+}	t_token;
+
+typedef enum
+{
+	INTPUT_RED,
+	OUTPUT_RED,
+	HEREDOC,
+	APPEND,
+	PIPE,
+	WORD
+} TYPE_TOKEN;
+
 
 
 t_command *parse_line(char *line);

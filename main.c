@@ -31,3 +31,162 @@ int main(int ac, char **av) {
     // return 0;
 	parcer(ac, av);
 }
+
+
+
+
+
+// // to see 
+// #include <stdlib.h>
+// #include <stdio.h>
+// #include <stdbool.h>
+// #include <string.h>
+// #include <ctype.h>
+
+// // Define whitespace characters
+// #define WHITESPACE " \t\n\r\f\v"
+
+// typedef enum e_token_type {
+//     TOKEN_WORD,
+//     TOKEN_PIPE,
+//     TOKEN_REDIRECT_IN,    // <
+//     TOKEN_REDIRECT_OUT,   // >
+//     TOKEN_REDIRECT_APPEND, // >>
+//     TOKEN_REDIRECT_HEREDOC, // <<
+//     TOKEN_EOF
+// } t_token_type;
+
+// typedef struct s_token {
+//     t_token_type type;
+//     char *value;
+// } t_token;
+
+// // Helper function to check if character is a special shell character
+// static bool is_special_char(char c) {
+//     return (c == '|' || c == '<' || c == '>' || c == ';' || c == '&');
+// }
+
+// // Create a new token
+// static t_token *create_token(t_token_type type, char *value) {
+//     t_token *token = malloc(sizeof(t_token));
+//     if (!token) return NULL;
+    
+//     token->type = type;
+//     token->value = value ? strdup(value) : NULL;
+//     return token;
+// }
+
+// // Skip whitespace characters
+// static void skip_whitespace(char **input) {
+//     while (**input && strchr(WHITESPACE, **input)) {
+//         (*input)++;
+//     }
+// }
+
+// // Handle quoted strings (both single and double)
+// static char *handle_quotes(char **input, char quote_type) {
+//     (*input)++; // Skip opening quote
+//     char *start = *input;
+//     size_t len = 0;
+    
+//     while (**input && **input != quote_type) {
+//         if (**input == '\\' && quote_type == '"') {
+//             (*input)++; // Skip escape character
+//             if (**input) {
+//                 len++;
+//                 (*input)++;
+//             }
+//         } else {
+//             len++;
+//             (*input)++;
+//         }
+//     }
+    
+//     char *value = strndup(start, len);
+//     if (**input == quote_type) (*input)++; // Skip closing quote
+//     return value;
+// }
+
+// // Handle redirection tokens (>, >>, <, <<)
+// static t_token *handle_redirect(char **input) {
+//     char first = **input;
+//     (*input)++;
+    
+//     if (**input == first) { // Check for >> or <<
+//         (*input)++;
+//         if (first == '>') return create_token(TOKEN_REDIRECT_APPEND, NULL);
+//         else return create_token(TOKEN_REDIRECT_HEREDOC, NULL);
+//     } else {
+//         if (first == '>') return create_token(TOKEN_REDIRECT_OUT, NULL);
+//         else return create_token(TOKEN_REDIRECT_IN, NULL);
+//     }
+// }
+
+// // Main tokenization function
+// t_token **tokenize(char *input) {
+//     t_token **tokens = malloc(100 * sizeof(t_token *));
+//     size_t token_count = 0;
+    
+//     while (*input) {
+//         skip_whitespace(&input);
+//         if (!*input) break;
+        
+//         if (*input == '\'' || *input == '"') {
+//             char quote_type = *input;
+//             char *value = handle_quotes(&input, quote_type);
+//             tokens[token_count++] = create_token(TOKEN_WORD, value);
+//             free(value);
+//         }
+//         else if (*input == '|') {
+//             input++;
+//             tokens[token_count++] = create_token(TOKEN_PIPE, NULL);
+//         }
+//         else if (*input == '<' || *input == '>') {
+//             tokens[token_count++] = handle_redirect(&input);
+//         }
+//         else {
+//             char *start = input;
+//             while (*input && !strchr(WHITESPACE, *input) && !is_special_char(*input)) {
+//                 input++;
+//             }
+//             char *value = strndup(start, input - start);
+//             tokens[token_count++] = create_token(TOKEN_WORD, value);
+//             free(value);
+//         }
+//     }
+    
+//     tokens[token_count] = create_token(TOKEN_EOF, NULL);
+//     return tokens;
+// }
+
+// // Example usage:
+// void print_tokens(t_token **tokens) {
+//     for (int i = 0; tokens[i]->type != TOKEN_EOF; i++) {
+//         const char *type_str;
+//         switch (tokens[i]->type) {
+//             case TOKEN_WORD: type_str = "WORD"; break;
+//             case TOKEN_PIPE: type_str = "PIPE"; break;
+//             case TOKEN_REDIRECT_IN: type_str = "REDIR_IN"; break;
+//             case TOKEN_REDIRECT_OUT: type_str = "REDIR_OUT"; break;
+//             case TOKEN_REDIRECT_APPEND: type_str = "REDIR_APPEND"; break;
+//             case TOKEN_REDIRECT_HEREDOC: type_str = "REDIR_HEREDOC"; break;
+//             default: type_str = "UNKNOWN";
+//         }
+//         printf("Token %d: Type=%s, Value='%s'\n", 
+//                i, type_str, tokens[i]->value ? tokens[i]->value : "NULL");
+//     }
+// }
+
+// int main() {
+//     char *input = "ls -la | grep \"hello world\" > out.txt << EOF";
+//     t_token **tokens = tokenize(input);
+//     print_tokens(tokens);
+    
+//     // Free tokens
+//     for (int i = 0; tokens[i]->type != TOKEN_EOF; i++) {
+//         free(tokens[i]->value);
+//         free(tokens[i]);
+//     }
+//     free(tokens);
+//     return 0;
+// }
