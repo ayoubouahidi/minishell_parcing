@@ -24,13 +24,6 @@ typedef enum
 } e_syntaxe;
 
 // tokenation
-
-typedef struct s_token
-{
-	TYPE_TOKEN type;
-	char *value;
-}	t_token;
-
 typedef enum
 {
 	INTPUT_RED,
@@ -40,6 +33,14 @@ typedef enum
 	PIPE,
 	WORD
 } TYPE_TOKEN;
+
+
+typedef struct s_token
+{
+	TYPE_TOKEN type;
+	char *value;
+}	t_token;
+
 
 
 
