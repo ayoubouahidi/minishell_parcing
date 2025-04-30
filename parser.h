@@ -31,7 +31,8 @@ typedef enum
 	HEREDOC,
 	APPEND,
 	PIPE,
-	WORD
+	WORD,
+	ENDF
 } TYPE_TOKEN;
 
 
@@ -41,7 +42,16 @@ typedef struct s_token
 	char *value;
 }	t_token;
 
+typedef struct s_lexer
+{
+	char c;
+	unsigned int i;
+	char *content;
+}t_lexer;
 
+
+
+// a revoire : lexer == '\t' || lexer == '\n' || lexer == '\r' || lexer == '\f' || lexer == '\v'
 
 
 t_command *parse_line(char *line);

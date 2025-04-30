@@ -5,8 +5,8 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -I/home/elkharti/projects/minishell/includes
 LDFLAGS = -lreadline
 
-SRCS = main.c parsing/parser.c  \
-		 parsing/trim.c parcer_v2.c
+SRCS = main.c  \
+		parsing/trim.c parsing/parcer_v2.c
 
 
 OBJ = $(SRCS:.c=.o)

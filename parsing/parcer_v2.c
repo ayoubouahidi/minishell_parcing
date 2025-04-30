@@ -203,28 +203,100 @@ bool syntaxe_error(char *str)
 	return (false);
 }
 
-bool is_a_special_char(char c)
+// bool is_a_special_char(char c)
+// {
+// 	return (c == '>' || c == '<' || c == '>>' || c == '<<' || c == '|');
+// }
+// initialisation of tokan and lexer
+t_token *creat_token(TYPE_TOKEN type, char *value)
 {
-	return (c == '>' || c == '<' || c == '>>' || c == '<<' || c == '|');
+	t_token *token;
+
+	token = (t_token *)malloc(sizeof(t_token));
+	if (!token)
+		return (NULL);
+	token->type = type;
+	token->value = value;
+	return (token);
 }
 
-t_token tokenize(char *str)
+t_lexer *creat_lexer(char *content)
 {
-	int i;
+	t_lexer *lexer;
 
-	i = 0;
-	// while (str[i] != '\0')
-	// {
-	// 	if (str[i] == ' ')
-	// }
+	lexer = (t_lexer *)malloc(sizeof(t_lexer));
+	if (!lexer)
+		return (NULL);
+	lexer->content = content;
+	lexer->i = 0;
+	lexer->c = lexer->content[lexer->i];
+	return (lexer);
+}
+
+// some utils function
+
+void	increment_using_index(t_lexer *lexer)
+{
+	if (lexer->c != '\0' && lexer->i < ft_strlen(lexer->content))
+	{
+		lexer->i += 1;
+		lexer->c = lexer->content[lexer->i];
+	}
+}
+t_token *string_process(t_lexer *lexer)
+{
+	t_lexer* tmp;
+	int count;
+	char* value;
+	count = 0;
+	tmp = lexer;
+	while (tmp->c != '"')
+	{
+		count++;
+		printf("char ==> %c\n",lexer->c);
+		increment_using_index(tmp);
+	}
+	printf("count is %d\n", count);
+	value = (char *)malloc(count + 1);
+	count = 0;
+	while (lexer->c != '"')
+	{
+		value[count] = lexer->c; 
+		increment_using_index(lexer);
+		count++;
+	}
+	value[count] = '\0';
+	return (creat_token(WORD, value));
+}
+
+
+// tokenize
+
+t_token	*tokenize(t_lexer *lexer) 
+{
+	while (lexer->c != '\0' && lexer->i < ft_strlen(lexer->content))
+	{
+		if(lexer->c == ' ' || lexer->c == '\t' || lexer->c == '\n' || lexer->c == '\r' || lexer->c == '\f' || lexer->c == '\v')
+			while (lexer->c == ' ' || lexer->c == '\t' || lexer->c == '\n' || lexer->c == '\r' || lexer->c == '\f' || lexer->c == '\v')
+				increment_using_index(lexer);
+		if(lexer->c == '"')
+			return string_process(lexer);
+		increment_using_index(lexer);
+	}
 	
+	return (NULL);
 }
+
+// for include all partes
 
 void	parcer(int ac, char **av)
 {
 	char	*line;
 	char	*trim;
 	t_token *token;
+	t_lexer *lexer;
+
+	token = NULL;
 	// int	i;
 	// t_command *head;
 	// head = NULL;
@@ -240,8 +312,17 @@ void	parcer(int ac, char **av)
 		trim = ft_strtrim(line, " ");
 		if (syntaxe_error(trim))
 		{
+			lexer = creat_lexer(trim);
+			token = tokenize(lexer);
+			printf("token(%d, %s)", token->type, token->value);
+			// while ((token = tokenize(lexer)) != NULL)
+			// {
+				// 	printf("token(%d, %s)", token->type, token->value);
+				
+			// }
 			// printf("trim => %s\n", trim);
 			// token = tokenize(line);
+			
 		}
 		else 
 		{
