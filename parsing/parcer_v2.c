@@ -270,7 +270,10 @@ t_token	*tokenize(t_lexer *lexer)
 		if (ft_isalnum(lexer->c))
 			return (is_word(lexer));
 		if (lexer->c == '|')
-			return (creat_token(PIPE, tostr(lexer->c)));
+		{
+			increment_using_index(lexer);
+			return (creat_token(PIPE, tostr('|')));
+		}
 		if (lexer->c == '<')
 			return (chech_herdoc(lexer));
 		if (lexer->c == '>')
