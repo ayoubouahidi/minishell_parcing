@@ -219,7 +219,45 @@ t_token* is_word(t_lexer *lexer)
 	value[count] = '\0';
 	return (creat_token(WORD, value));
 }
+char *tostr(char c)
+{
+	char *val;
 
+	val = (char *)malloc(2);
+	val[0] = c;
+	val[1] = '\0';
+	return (val);
+}
+
+t_token* chech_herdoc(t_lexer* lexer)
+{
+	t_lexer tmp;
+
+	tmp = *lexer;
+	increment_using_index(&tmp);
+	increment_using_index(lexer);
+	if (tmp.c == '<')
+	{
+		increment_using_index(lexer);
+		return(creat_token(HEREDOC, "<<"));
+	}
+	return (creat_token(INTPUT_RED, tostr('<')));
+}
+
+t_token* check_append(t_lexer* lexer)
+{
+	t_lexer tmp;
+
+	tmp = *lexer;
+	increment_using_index(&tmp);
+	increment_using_index(lexer);
+	if (tmp.c == '>')
+	{
+		increment_using_index(lexer);
+		return(creat_token(APPEND, ">>"));
+	}
+	return (creat_token(OUTPUT_RED, tostr('>')));
+}
 // tokenize
 
 t_token	*tokenize(t_lexer *lexer) 
@@ -231,15 +269,19 @@ t_token	*tokenize(t_lexer *lexer)
 				increment_using_index(lexer);
 		if (ft_isalnum(lexer->c))
 			return (is_word(lexer));
+		if (lexer->c == '|')
+			return (creat_token(PIPE, tostr(lexer->c)));
+		if (lexer->c == '<')
+			return (chech_herdoc(lexer));
+		if (lexer->c == '>')
+			return (check_append(lexer));
 		if(lexer->c == '"')
 			return string_process(lexer);
 		increment_using_index(lexer);
 	}
-	
 	return (creat_token(ENDF, "END"));
 }
 
-// for include all partes
 
 void	parcer(int ac, char **av)
 {
