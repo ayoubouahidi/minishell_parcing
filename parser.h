@@ -13,6 +13,8 @@ typedef struct s_command
 {
     // char *cmd;
     char *args;
+	char *infile;
+	char *outfile;
     struct s_command *next;
 } t_command;
 

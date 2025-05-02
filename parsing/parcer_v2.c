@@ -286,6 +286,15 @@ t_token	*tokenize(t_lexer *lexer)
 }
 
 
+// parser part
+t_command* parser_commande(t_token* token)
+{
+	t_token tmp;
+
+
+}
+
+
 void	parcer(int ac, char **av)
 {
 	char	*line;
@@ -317,6 +326,7 @@ void	parcer(int ac, char **av)
 			{
 				token = tokenize(lexer);
 				printf("token(%d, %s)\n", token->type, token->value);
+				parser_commande(token);
 				if (token->type  == ENDF)
 					break;
 			}
