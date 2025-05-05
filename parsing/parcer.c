@@ -17,6 +17,8 @@
 //     }
 // }
 
+
+// linked list functions 
 void	printlist(t_command *head)
 {
 	t_command	*tmp;
@@ -41,6 +43,23 @@ t_command	*ft_lstnew_cmd(void *content)
 	return (tmp);
 }
 
+void	ft_lstadd_back_token(t_token **lst, t_token *new)
+{
+	t_token	*tmp;
+
+	if (!lst || !new)
+		return ;
+	tmp = *lst;
+	if (*lst)
+	{
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+	}
+	else
+		*lst = new;
+}
+
 void	ft_lstadd_back_cmd(t_command **lst, t_command *new)
 {
 	t_command	*tmp;
@@ -56,6 +75,21 @@ void	ft_lstadd_back_cmd(t_command **lst, t_command *new)
 	}
 	else
 		*lst = new;
+}
+
+
+
+int	ft_lstsize_parce(t_command *lst)
+{
+	int	cmpt;
+
+	cmpt = 0;
+	while (lst != NULL)
+	{
+		lst = lst->next;
+		cmpt++;
+	}
+	return (cmpt);
 }
 
 // void	add_node(char *line, t_command **head)
@@ -141,6 +175,7 @@ t_token *creat_token(TYPE_TOKEN type, char *value)
 		return (NULL);
 	token->type = type;
 	token->value = value;
+	token->next = NULL;
 	return (token);
 }
 
@@ -282,47 +317,82 @@ t_token	*tokenize(t_lexer *lexer)
 			return string_process(lexer);
 		increment_using_index(lexer);
 	}
+	
 	return (creat_token(ENDF, "END"));
 }
-// some utils function of parse commande 
-char *to_arg(t_token* token)
-{
-	char *command;
-	int lenv;
-	int i;
 
-	i = 0;
+// some utils function of parse commande 
+
+char *to_arg(t_token* token, char *arg)
+{
+	int lenv;
+	int lenghtcommande;
+	char *new_commande;
+
 	lenv = ft_strlen(token->value);
-	command = (char *)malloc(lenv);
-	ft_strlcpy(command, token->value, lenv);
-	return (command);
+	lenghtcommande = ft_strlen(arg);
+	new_commande = (char *)malloc(lenghtcommande + 1 + lenv + 1);
+	if (arg) {
+        ft_strlcpy(new_commande, arg, lenghtcommande + 1); 
+        new_commande[lenghtcommande] = ' '; 
+        ft_strlcpy(new_commande + lenghtcommande + 1, token->value, lenv + 1);
+    } else {
+        ft_strlcpy(new_commande, token->value, lenv + 1); 
+    }
+    return new_commande;
 }
 
 // check sysntaxe error
 
-char *infile(t_token *token)
-{
+// char *infile(t_token *token)
+// {
 
-}
+// }
 // t_command *creat_command()
 // {
 // 
 // }
+
+
+
 // parser part
+
+
 t_command* parser_commande(t_token* token)
 {
 	t_command *cmd;
-	t_token tmp;
+	// // t_command tmp;
+	static char *args;
 
+	cmd = (t_command *)malloc(sizeof(t_command));
 	
-	while (token->type != ENDF)
-	{	
+	// if(token->type == WORD)
+	// {
+	// 	args = to_arg(token, args);
+	// 	cmd->args = args;
+	// }
+	// 	// else if (token->type == INTPUT_RED)
+	// 	// 	cmd->infile = infile(token);
+	// if (token->type == ENDF)
+	// 	args = NULL;				
+	// cmd->next = NULL;
+	// return(cmd);
+
+	while (token && token->type != ENDF)
+	{
 		if(token->type == WORD)
-			cmd->args = to_arg(token);
-		else if (token->type == INTPUT_RED)
-			cmd->infile = infile(token);
+		{
+			args = to_arg(token, args);
+			
+		}
+		if (token->type != WORD)
+			break;
+		token = token->next;
 	}
-	
+	cmd->args = args;
+	args = NULL;
+	cmd->next = NULL;
+	return(cmd);
 }
 
 
@@ -331,14 +401,15 @@ void	parcer(int ac, char **av)
 	char	*line;
 	char	*trim;
 	t_token *token;
+	t_token *head_token;
 	t_lexer *lexer;
+	// t_token tmp;
+	t_command *commande;
+	t_command *head;
 
+	head_token = NULL;
+	head = NULL;
 	token = NULL;
-	// int	i;
-	// t_command *head;
-	// head = NULL;
-	// head++;
-    // (head)->args = NULL;
 	ac++;
 	av++;
 	while (1)
@@ -357,10 +428,20 @@ void	parcer(int ac, char **av)
 			{
 				token = tokenize(lexer);
 				printf("token(%d, %s)\n", token->type, token->value);
-				parser_commande(token);
+				// commande = parser_commande(token);
+				// printf("commande is ==>%s\n", commande->args);
+				ft_lstadd_back_token(&head_token, token);
 				if (token->type  == ENDF)
 					break;
 			}
+			// printlist(head_token);
+			commande = parser_commande(head_token);
+			ft_lstadd_back_cmd(&head, commande);
+			printlist(head);
+			head_token = NULL;
+			head = NULL;
+			token = NULL;
+			commande = NULL;			
 			// printf("trim => %s\n", trim);
 			// token = tokenize(line);
 			
