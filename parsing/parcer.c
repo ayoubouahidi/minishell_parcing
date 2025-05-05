@@ -26,7 +26,7 @@ void	printlist(t_command *head)
 	tmp = head;
 	while (tmp != NULL)
 	{
-		printf(" node ==> %s\n", tmp->args);
+		printf(" args ==> %s\n infile ==> %s\n outfile ==> %s\n", tmp->args, tmp->infile, tmp->outfile);
 		tmp = tmp->next;
 	}
 }
@@ -321,6 +321,8 @@ t_token	*tokenize(t_lexer *lexer)
 	return (creat_token(ENDF, "END"));
 }
 
+
+
 // some utils function of parse commande 
 
 char *to_arg(t_token* token, char *arg)
@@ -332,29 +334,47 @@ char *to_arg(t_token* token, char *arg)
 	lenv = ft_strlen(token->value);
 	lenghtcommande = ft_strlen(arg);
 	new_commande = (char *)malloc(lenghtcommande + 1 + lenv + 1);
-	if (arg) {
+	if (arg)
+	{
         ft_strlcpy(new_commande, arg, lenghtcommande + 1); 
         new_commande[lenghtcommande] = ' '; 
         ft_strlcpy(new_commande + lenghtcommande + 1, token->value, lenv + 1);
-    } else {
+    } 
+	else 
         ft_strlcpy(new_commande, token->value, lenv + 1); 
-    }
-    return new_commande;
+    return (new_commande);
 }
 
-// check sysntaxe error
-
-// char *infile(t_token *token)
-// {
-
-// }
-// t_command *creat_command()
-// {
-// 
-// }
+// infile function u should check sysntaxe error
 
 
+char *infile(t_token **token, char *arg)
+{
+	int lenv;
+	int lenghtcommande;
+	char *new_commande;
+	
+	*token = (*token)->next;
+	if ((*token)->type != WORD)
+	{
+		printf("Syntaxe error \n : > should be like this > filename ");
+		return(NULL);
+	}
+	lenv = ft_strlen((*token)->value);
+	lenghtcommande = ft_strlen(arg);
+	new_commande = (char *)malloc(lenghtcommande + 1 + lenv + 1);
+	if (arg)
+	{
+        ft_strlcpy(new_commande, arg, lenghtcommande + 1); 
+        new_commande[lenghtcommande] = ' '; 
+        ft_strlcpy(new_commande + lenghtcommande + 1, (*token)->value, lenv + 1);
+    }
+	else 
+        ft_strlcpy(new_commande, (*token)->value, lenv + 1); 
+    return (new_commande);
+}
 
+  
 // parser part
 
 
@@ -362,10 +382,11 @@ t_command* parser_commande(t_token* token)
 {
 	t_command *cmd;
 	// // t_command tmp;
-	static char *args;
+	char *args = NULL;
+	char *infile_file = NULL;
+	char *outfile_file = NULL;
 
-	cmd = (t_command *)malloc(sizeof(t_command));
-	
+	cmd = (t_command *)malloc(sizeof(t_command));	
 	// if(token->type == WORD)
 	// {
 	// 	args = to_arg(token, args);
@@ -381,16 +402,18 @@ t_command* parser_commande(t_token* token)
 	while (token && token->type != ENDF)
 	{
 		if(token->type == WORD)
-		{
 			args = to_arg(token, args);
-			
-		}
-		if (token->type != WORD)
-			break;
+		else if (token->type == OUTPUT_RED)
+			infile_file = infile(&token, infile_file);
+		else if (token->type == INTPUT_RED)
+			outfile_file = infile(&token, outfile_file);
 		token = token->next;
 	}
 	cmd->args = args;
-	args = NULL;
+	cmd->infile = infile_file;
+	cmd->outfile = outfile_file;
+	// infile_file = NULL;
+	// args = NULL;
 	cmd->next = NULL;
 	return(cmd);
 }
@@ -468,6 +491,5 @@ void	parcer(int ac, char **av)
 		// 	i++;
 		// }
 		
-	}
-	
+	}	
 }
