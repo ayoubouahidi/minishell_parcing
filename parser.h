@@ -9,13 +9,24 @@
 
 #define WHITESPACE " \t\n\r\f\v"
 
+
+// redurection structii
+//  >>  << 
+// typedef struct s_red
+// {
+// 	char *file;
+// 	TYPE_TOKEN type;
+// 	struct s_red *next;
+// } t_red; 
+
+// commande struct 
 typedef struct s_command
 {
-    // char *cmd;
-    char *args;
+	char *args;
 	char *infile;
 	char *outfile;
-    struct s_command *next;
+	// t_red *red;
+	struct s_command *next;
 } t_command;
 
 

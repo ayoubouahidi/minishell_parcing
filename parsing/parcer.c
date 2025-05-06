@@ -345,7 +345,7 @@ char *to_arg(t_token* token, char *arg)
     return (new_commande);
 }
 
-// infile function u should check sysntaxe error
+// infile function u should check sysntaxe error and a reduction file function 
 
 
 char *infile(t_token **token, char *arg)
@@ -374,6 +374,14 @@ char *infile(t_token **token, char *arg)
     return (new_commande);
 }
 
+// t_red *creat_red(char *file)
+// {
+// 	t_red	*red;
+
+// 	red = (t_red *)malloc(sizeof(t_red));
+// 	red 
+// }
+
   
 // parser part
 
@@ -381,11 +389,12 @@ char *infile(t_token **token, char *arg)
 t_command* parser_commande(t_token* token)
 {
 	t_command *cmd;
+	// t_red *red;
 	// // t_command tmp;
 	char *args = NULL;
 	char *infile_file = NULL;
 	char *outfile_file = NULL;
-
+	// red = NULL;
 	cmd = (t_command *)malloc(sizeof(t_command));	
 	// if(token->type == WORD)
 	// {
@@ -408,12 +417,14 @@ t_command* parser_commande(t_token* token)
 		else if (token->type == INTPUT_RED)
 			outfile_file = infile(&token, outfile_file);
 		token = token->next;
+
 	}
 	cmd->args = args;
+
 	cmd->infile = infile_file;
 	cmd->outfile = outfile_file;
-	// infile_file = NULL;
-	// args = NULL;
+	infile_file = NULL;
+	args = NULL;
 	cmd->next = NULL;
 	return(cmd);
 }
